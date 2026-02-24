@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mic, Sparkles, Share2, Smartphone } from "lucide-react";
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Incant — Cast your idea into an app",
@@ -157,14 +158,7 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 px-6 py-8 text-center text-indigo-600 text-xs">
-        <p>© 2026 Incant · <Link href="mailto:reachout@actvli.com" className="hover:text-indigo-400">reachout@actvli.com</Link></p>
-        <div className="flex justify-center gap-4 mt-2">
-          <Link href="/pricing" className="hover:text-indigo-400">Pricing</Link>
-          <Link href="/explore" className="hover:text-indigo-400">Explore</Link>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

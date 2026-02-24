@@ -150,6 +150,42 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
             ))}
           </div>
         )}
+
+        {/* Account settings */}
+        <div className="mt-12 pt-6 border-t border-gray-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-700">Account</p>
+              <p className="text-xs text-gray-400">{profile.username} · {profile.tier} plan</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={async () => {
+                  await createClient().auth.signOut();
+                  router.push("/");
+                }}
+                className="px-3 py-1.5 rounded-lg text-xs text-gray-500 border border-gray-200 hover:bg-gray-50"
+              >
+                Sign out
+              </button>
+              <button
+                onClick={async () => {
+                  if (!confirm("Delete your account and all spells permanently? This cannot be undone.")) return;
+                  const res = await fetch("/api/account", { method: "DELETE" });
+                  if (res.ok) router.push("/");
+                }}
+                className="px-3 py-1.5 rounded-lg text-xs text-red-500 border border-red-200 hover:bg-red-50"
+              >
+                Delete account
+              </button>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 mt-2">
+            <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
+            {" · "}
+            <Link href="/terms" className="underline hover:text-gray-600">Terms of Service</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
