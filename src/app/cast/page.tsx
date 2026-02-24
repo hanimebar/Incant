@@ -66,7 +66,13 @@ export default function CastPage() {
         body: JSON.stringify({ input }),
       });
 
-      const data = await res.json();
+      let data: { error?: string; tier?: string; url?: string };
+      try {
+        data = await res.json();
+      } catch {
+        setError("Server error. Please try again.");
+        return;
+      }
 
       if (!res.ok) {
         if (res.status === 401) {
@@ -81,7 +87,7 @@ export default function CastPage() {
         return;
       }
 
-      router.push(data.url);
+      router.push(data.url!);
     } catch {
       setError("Connection error. Please try again.");
     } finally {

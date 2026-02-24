@@ -8,8 +8,6 @@ import type { CastResult, TemplateId } from "@/types";
 
 export const runtime = "nodejs";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 const TEMPLATE_DESCRIPTIONS = `
 - habit-tracker: Track daily habits with streaks (e.g. "meditate every day", "read 20 pages")
 - water-intake: Log daily water/fluid consumption toward a goal (e.g. "drink 2 liters")
@@ -34,6 +32,11 @@ const TEMPLATE_DESCRIPTIONS = `
 `;
 
 export async function POST(req: NextRequest) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({ error: "AI service not configured" }, { status: 503 });
+  }
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
