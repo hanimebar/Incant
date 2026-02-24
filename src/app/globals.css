@@ -20,6 +20,20 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Subtle deep-purple vignette on all four edges */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,   transparent 60%, #2d0a4e55 100%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, transparent 60%, #2d0a4e55 100%),
+    radial-gradient(ellipse 60% 80% at 0% 50%,   transparent 60%, #2d0a4e44 100%),
+    radial-gradient(ellipse 60% 80% at 100% 50%, transparent 60%, #2d0a4e44 100%);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
