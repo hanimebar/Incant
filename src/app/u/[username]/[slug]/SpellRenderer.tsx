@@ -5,6 +5,7 @@ import { Share2, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import type { Spell } from "@/types";
 import type { TemplateId } from "@/types";
+import HomeScreenBanner from "@/components/HomeScreenBanner";
 
 const TEMPLATE_MAP: Record<TemplateId, ReturnType<typeof lazy>> = {
   "habit-tracker": lazy(() => import("@/templates/HabitTracker")),
@@ -59,6 +60,9 @@ export default function SpellRenderer({ spell }: Props) {
 
   return (
     <div className="relative">
+      {/* Add to Home Screen banner */}
+      <HomeScreenBanner />
+
       {/* Share bar */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
