@@ -1,101 +1,170 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Mic, Sparkles, Share2, Smartphone } from "lucide-react";
+import type { Metadata } from "next";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Incant — Cast your idea into an app",
+  description: "Speak or type your idea. Incant turns it into a shareable micro-app in seconds.",
+  openGraph: {
+    title: "Incant — Cast your idea into an app",
+    description: "Speak or type your idea. It becomes a real app instantly.",
+    siteName: "Incant",
+  },
+};
+
+const TEMPLATES = [
+  { icon: "✅", name: "Habit Tracker" },
+  { icon: "💧", name: "Water Intake" },
+  { icon: "💸", name: "Expense Logger" },
+  { icon: "📋", name: "To-Do List" },
+  { icon: "⏱️", name: "Countdown Timer" },
+  { icon: "🃏", name: "Flashcard Deck" },
+  { icon: "❓", name: "Quiz Builder" },
+  { icon: "📓", name: "Daily Journal" },
+  { icon: "🎯", name: "Goal Tracker" },
+  { icon: "🏦", name: "Savings Goal" },
+];
+
+const STEPS = [
+  { icon: <Mic className="w-6 h-6" />, title: "Speak or type", desc: "Describe the app you want in plain language. \"A habit tracker for my morning routine.\"" },
+  { icon: <Sparkles className="w-6 h-6" />, title: "We cast it", desc: "Claude picks the best template and customizes it to your exact description." },
+  { icon: <Share2 className="w-6 h-6" />, title: "Share it", desc: "Your app is live instantly at a unique link. Share it, add it to your phone." },
+];
+
+export default function LandingPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="min-h-screen bg-[#0f0a2e] text-white overflow-hidden">
+      {/* Nav */}
+      <nav className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto">
+        <span className="text-xl font-bold flex items-center gap-2">🪄 Incant</span>
+        <div className="flex items-center gap-4">
+          <Link href="/explore" className="text-indigo-300 hover:text-white text-sm transition-colors">Explore</Link>
+          <Link href="/pricing" className="text-indigo-300 hover:text-white text-sm transition-colors">Pricing</Link>
+          <Link href="/auth/login"
+            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-sm font-medium transition-all">
+            Sign in
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </nav>
+
+      {/* Hero */}
+      <section className="relative text-center px-4 pt-16 pb-24 max-w-3xl mx-auto">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-600/15 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative">
+          <div className="inline-block px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-indigo-300 mb-6">
+            ✨ Now in beta — try it free
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+            Cast your idea
+            <br />
+            <span style={{ color: "#f5c518" }}>into an app.</span>
+          </h1>
+
+          <p className="text-xl text-indigo-300 max-w-xl mx-auto mb-8 leading-relaxed">
+            Speak or type any idea for a personal micro-app.
+            It appears — live, shareable, works on your phone.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/cast"
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg text-[#0f0a2e] hover:brightness-110 transition-all shadow-xl shadow-yellow-500/20"
+              style={{ backgroundColor: "#f5c518" }}>
+              <Sparkles className="w-5 h-5" />
+              Cast your first spell
+            </Link>
+            <Link href="/explore"
+              className="px-8 py-4 rounded-2xl font-semibold text-sm text-indigo-300 bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+              See examples →
+            </Link>
+          </div>
+
+          <p className="text-indigo-500 text-sm mt-4">Free to start · No credit card · Ready in seconds</p>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="px-4 py-16 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">How it works</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {STEPS.map((step, i) => (
+            <div key={i} className="text-center p-6 rounded-2xl bg-white/5 border border-white/10">
+              <div className="w-12 h-12 rounded-xl bg-indigo-600/30 flex items-center justify-center mx-auto mb-4 text-indigo-300">
+                {step.icon}
+              </div>
+              <h3 className="text-lg font-bold mb-2">{step.title}</h3>
+              <p className="text-indigo-300 text-sm leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Template showcase */}
+      <section className="px-4 py-16 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-3">20 app templates</h2>
+        <p className="text-indigo-400 text-center mb-10">Trackers, finance tools, productivity apps, and more.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {TEMPLATES.map(({ icon, name }) => (
+            <div key={name} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all">
+              <span className="text-2xl">{icon}</span>
+              <span className="text-xs text-indigo-300 text-center leading-tight">{name}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-indigo-500 text-sm mt-4">+ 10 more templates</p>
+      </section>
+
+      {/* PWA section */}
+      <section className="px-4 py-16 max-w-4xl mx-auto">
+        <div className="rounded-2xl bg-gradient-to-br from-indigo-900/50 to-purple-900/50 border border-indigo-700/30 p-8 text-center">
+          <Smartphone className="w-10 h-10 mx-auto mb-4 text-indigo-300" />
+          <h2 className="text-2xl font-bold mb-3">Works on your phone</h2>
+          <p className="text-indigo-300 max-w-md mx-auto text-sm leading-relaxed">
+            Every spell is a PWA — add it to your home screen and it feels like a native app.
+            Share the link and anyone can use it, no app store needed.
+          </p>
+        </div>
+      </section>
+
+      {/* Pricing teaser */}
+      <section className="px-4 py-16 max-w-lg mx-auto text-center">
+        <h2 className="text-3xl font-bold mb-3">Get started for free</h2>
+        <p className="text-indigo-400 mb-6">2 free spells, no credit card needed.</p>
+        <div className="flex justify-center gap-4 text-sm text-indigo-300">
+          <span>Free: 2 apps</span>
+          <span>·</span>
+          <span>Caster: €7/mo</span>
+          <span>·</span>
+          <span>Wizard: €14/mo</span>
+        </div>
+        <Link href="/pricing" className="inline-block mt-4 text-[#f5c518] text-sm underline underline-offset-4">
+          See all plans →
+        </Link>
+      </section>
+
+      {/* CTA */}
+      <section className="px-4 py-20 text-center">
+        <h2 className="text-4xl font-bold mb-4">Ready to cast?</h2>
+        <p className="text-indigo-400 mb-8">Your first spell is free. Say it out loud.</p>
+        <Link href="/cast"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-[#0f0a2e] hover:brightness-110 transition-all"
+          style={{ backgroundColor: "#f5c518" }}>
+          <Sparkles className="w-5 h-5" />
+          Cast your first spell
+        </Link>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 px-6 py-8 text-center text-indigo-600 text-xs">
+        <p>© 2026 Incant · <Link href="mailto:reachout@actvli.com" className="hover:text-indigo-400">reachout@actvli.com</Link></p>
+        <div className="flex justify-center gap-4 mt-2">
+          <Link href="/pricing" className="hover:text-indigo-400">Pricing</Link>
+          <Link href="/explore" className="hover:text-indigo-400">Explore</Link>
+        </div>
       </footer>
-    </div>
+    </main>
   );
 }
