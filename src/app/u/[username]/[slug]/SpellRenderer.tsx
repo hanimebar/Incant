@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { Spell } from "@/types";
 import type { TemplateId } from "@/types";
 import HomeScreenBanner from "@/components/HomeScreenBanner";
+import TopNav from "@/components/TopNav";
 
 const TEMPLATE_MAP: Record<TemplateId, ReturnType<typeof lazy>> = {
   "habit-tracker": lazy(() => import("@/templates/HabitTracker")),
@@ -60,6 +61,9 @@ export default function SpellRenderer({ spell }: Props) {
 
   return (
     <div className="relative">
+      {/* Top navigation */}
+      <TopNav variant="light" />
+
       {/* Add to Home Screen banner */}
       <HomeScreenBanner />
 

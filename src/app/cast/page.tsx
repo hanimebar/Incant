@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Mic, MicOff, Sparkles, Loader2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import TopNav from "@/components/TopNav";
 
 export default function CastPage() {
   const router = useRouter();
@@ -111,7 +112,9 @@ export default function CastPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0f0a2e] flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-screen bg-[#0f0a2e] flex flex-col">
+      <TopNav variant="dark" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-3xl" />
@@ -222,6 +225,7 @@ export default function CastPage() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </main>
   );
