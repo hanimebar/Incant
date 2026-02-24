@@ -29,6 +29,7 @@ const TEMPLATE_DESCRIPTIONS = `
 - flashcard-deck: Front/back cards for studying, flip to reveal answer
 - data-table: Simple table with custom columns, add/view rows
 - custom-reminder: Set recurring reminders with custom message and frequency
+- sound-board: Soundboard with buttons that play fun synthesized sounds (fart noises, bleeps, boings, etc.)
 `;
 
 export async function POST(req: NextRequest) {
@@ -113,6 +114,13 @@ Pick the best matching template. Be creative with the name.`,
       castResult = JSON.parse(text);
     } catch {
       return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
+    }
+
+    if (castResult.confidence < 0.35) {
+      return NextResponse.json(
+        { error: "We couldn't match that to a supported app type yet. Try describing a tracker, list, calculator, journal, quiz, countdown, or soundboard." },
+        { status: 422 }
+      );
     }
 
     // Generate unique slug

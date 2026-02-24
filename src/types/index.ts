@@ -30,7 +30,8 @@ export type TemplateId =
   | "form-survey"
   | "flashcard-deck"
   | "data-table"
-  | "custom-reminder";
+  | "custom-reminder"
+  | "sound-board";
 
 export interface TemplateConfig {
   name: string;

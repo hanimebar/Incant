@@ -25,4 +25,5 @@ export const TEMPLATE_COMPONENTS: Record<TemplateId, ComponentType<TemplateProps
   "flashcard-deck": lazy(() => import("./FlashcardDeck")),
   "data-table": lazy(() => import("./DataTable")),
   "custom-reminder": lazy(() => import("./CustomReminder")),
+  "sound-board": lazy(() => import("./SoundBoard")),
 } as Record<TemplateId, ComponentType<TemplateProps>>;
