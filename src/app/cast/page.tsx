@@ -83,7 +83,7 @@ export default function CastPage() {
           setError("You've reached the free plan limit. Upgrade to Caster for unlimited apps.");
           return;
         }
-        setError(data.error || "Something went wrong. Try again.");
+        setError(data.error || "Something went wrong. Try again. (Check Vercel logs for details)");
         return;
       }
 

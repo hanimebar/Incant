@@ -32,51 +32,52 @@ const TEMPLATE_DESCRIPTIONS = `
 `;
 
 export async function POST(req: NextRequest) {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: "AI service not configured" }, { status: 503 });
-  }
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  try {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json({ error: "AI service not configured" }, { status: 503 });
+    }
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  const { input } = await req.json();
-  if (!input || typeof input !== "string" || input.trim().length < 3) {
-    return NextResponse.json({ error: "Input too short" }, { status: 400 });
-  }
+    const { input } = await req.json();
+    if (!input || typeof input !== "string" || input.trim().length < 3) {
+      return NextResponse.json({ error: "Input too short" }, { status: 400 });
+    }
 
-  // Check tier limits
-  const service = createServiceClient();
-  const { data: profile } = await service
-    .from("profiles")
-    .select("tier, app_count, username")
-    .eq("id", user.id)
-    .single();
+    // Check tier limits
+    const service = createServiceClient();
+    const { data: profile } = await service
+      .from("profiles")
+      .select("tier, app_count, username")
+      .eq("id", user.id)
+      .single();
 
-  if (!profile) {
-    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
-  }
+    if (!profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
 
-  const LIMITS: Record<string, number> = { free: 2, caster: Infinity, wizard: Infinity };
-  if (profile.app_count >= LIMITS[profile.tier]) {
-    return NextResponse.json(
-      { error: "App limit reached", tier: profile.tier },
-      { status: 403 }
-    );
-  }
+    const LIMITS: Record<string, number> = { free: 2, caster: Infinity, wizard: Infinity };
+    if (profile.app_count >= LIMITS[profile.tier]) {
+      return NextResponse.json(
+        { error: "App limit reached", tier: profile.tier },
+        { status: 403 }
+      );
+    }
 
-  // Parse with Claude
-  const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 1024,
-    messages: [
-      {
-        role: "user",
-        content: `You are an app parser for a platform called Incant. A user has described an app they want.
+    // Parse with Claude
+    const message = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      messages: [
+        {
+          role: "user",
+          content: `You are an app parser for a platform called Incant. A user has described an app they want.
 
 User input: "${input.trim()}"
 
@@ -102,59 +103,64 @@ Return a JSON object (no markdown, just raw JSON) with this exact shape:
 }
 
 Pick the best matching template. Be creative with the name.`,
-      },
-    ],
-  });
+        },
+      ],
+    });
 
-  let castResult: CastResult;
-  try {
-    const text = message.content[0].type === "text" ? message.content[0].text : "";
-    castResult = JSON.parse(text);
-  } catch {
-    return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
-  }
-
-  // Generate unique slug
-  const baseSlug = slugify(castResult.config.name || "my-app");
-  let slug = baseSlug;
-  let attempt = 0;
-  while (true) {
-    const { data: existing } = await service
-      .from("spells")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("slug", slug)
-      .maybeSingle();
-    if (!existing) break;
-    attempt++;
-    slug = `${baseSlug}-${nanoid(4)}`;
-    if (attempt > 10) {
-      slug = `app-${nanoid(8)}`;
-      break;
+    let castResult: CastResult;
+    try {
+      const text = message.content[0].type === "text" ? message.content[0].text : "";
+      castResult = JSON.parse(text);
+    } catch {
+      return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
     }
+
+    // Generate unique slug
+    const baseSlug = slugify(castResult.config.name || "my-app");
+    let slug = baseSlug;
+    let attempt = 0;
+    while (true) {
+      const { data: existing } = await service
+        .from("spells")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("slug", slug)
+        .maybeSingle();
+      if (!existing) break;
+      attempt++;
+      slug = `${baseSlug}-${nanoid(4)}`;
+      if (attempt > 10) {
+        slug = `app-${nanoid(8)}`;
+        break;
+      }
+    }
+
+    // Save spell
+    const { data: spell, error } = await service
+      .from("spells")
+      .insert({
+        user_id: user.id,
+        slug,
+        name: castResult.config.name,
+        template_id: castResult.templateId as TemplateId,
+        config: castResult.config,
+        is_public: true,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: `Failed to save spell: ${error.message}` }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      spell,
+      username: profile.username,
+      url: `/u/${profile.username}/${slug}`,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("[cast] unhandled error:", message);
+    return NextResponse.json({ error: `Cast failed: ${message}` }, { status: 500 });
   }
-
-  // Save spell
-  const { data: spell, error } = await service
-    .from("spells")
-    .insert({
-      user_id: user.id,
-      slug,
-      name: castResult.config.name,
-      template_id: castResult.templateId as TemplateId,
-      config: castResult.config,
-      is_public: true,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: "Failed to save spell" }, { status: 500 });
-  }
-
-  return NextResponse.json({
-    spell,
-    username: profile.username,
-    url: `/u/${profile.username}/${slug}`,
-  });
 }
