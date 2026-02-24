@@ -23,6 +23,6 @@ export function formatCurrency(amount: number, currency = "EUR"): string {
 }
 
 export function getShareUrl(username: string, slug: string): string {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://incant.app";
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://incant.actvli.com";
   return `${base}/u/${username}/${slug}`;
 }
