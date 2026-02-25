@@ -228,20 +228,25 @@ export default function VoiceModulator({ config }: TemplateProps) {
   const startSession = useCallback(async () => {
     try {
       setError(null);
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      const AC = window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      // getUserMedia must be called directly from an onClick handler (trusted user gesture).
+      // We call resume() BEFORE getUserMedia so the AudioContext is unlocked first.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const AC = window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AC();
-      await ctx.resume(); // Required on iOS — context starts suspended
+      await ctx.resume();
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       const source = ctx.createMediaStreamSource(stream);
       const stopEffect = applyEffect(ctx, source, effect);
       sessionRef.current = { ctx, source, stream, stopEffect };
       setActive(true);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Microphone access denied";
-      setError(msg.includes("Permission") || msg.includes("denied") || msg.includes("NotAllowed")
-        ? "Microphone permission denied — allow it in your browser settings."
-        : msg);
+      setError(
+        msg.includes("Permission") || msg.includes("denied") || msg.includes("NotAllowed")
+          ? "Microphone permission denied — allow it in your browser settings."
+          : `Could not start mic: ${msg}`
+      );
       setActive(false);
     }
   }, [effect]);
@@ -250,10 +255,13 @@ export default function VoiceModulator({ config }: TemplateProps) {
     setEffect(next);
     const s = sessionRef.current;
     if (!s) return;
-    // Tear down old chain, build new one on the same context
+    // Tear down old chain. The source node is now disconnected, so we must
+    // reconnect it before applying the new effect.
     s.stopEffect();
-    const stopEffect = applyEffect(s.ctx, s.source, next);
-    sessionRef.current = { ...s, stopEffect };
+    // Re-create source from the same stream (source nodes are single-use after disconnect)
+    const newSource = s.ctx.createMediaStreamSource(s.stream);
+    const stopEffect = applyEffect(s.ctx, newSource, next);
+    sessionRef.current = { ...s, source: newSource, stopEffect };
   }, []);
 
   return (
@@ -279,7 +287,7 @@ export default function VoiceModulator({ config }: TemplateProps) {
             return (
               <button
                 key={e.id}
-                onPointerDown={() => switchEffect(e.id)}
+                onClick={() => switchEffect(e.id)}
                 className="flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 transition-all duration-150 active:scale-95 select-none"
                 style={{
                   backgroundColor: sel ? `${color}22` : "transparent",
@@ -295,9 +303,9 @@ export default function VoiceModulator({ config }: TemplateProps) {
           })}
         </div>
 
-        {/* Start / Stop */}
+        {/* Start / Stop — must use onClick so getUserMedia gets a trusted user gesture */}
         <button
-          onPointerDown={active ? stopSession : startSession}
+          onClick={active ? stopSession : startSession}
           className="w-full py-5 rounded-2xl font-bold text-lg transition-all active:scale-95"
           style={{ backgroundColor: active ? "#dc2626" : color, color: "white" }}
         >
