@@ -1,23 +1,34 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Mic, Sparkles, Loader2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TopNav from "@/components/TopNav";
 
-export default function CastPage() {
+const examples = [
+  "A water tracker to drink 8 glasses a day",
+  "Expense log for my trip to Portugal",
+  "Habit tracker for morning meditation and gym",
+  "Countdown to my wedding on June 15th 2026",
+  "Quiz about European capitals",
+];
+
+function CastPageInner() {
   const router = useRouter();
-  const [input, setInput] = useState("");
+  const searchParams = useSearchParams();
+  const [input, setInput] = useState(searchParams.get("prompt") ?? "");
   const [isListening, setIsListening] = useState(false);
   const [isCasting, setIsCasting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [voiceSupported, setVoiceSupported] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
+  const finalTranscriptRef = useRef("");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getSpeechRecognition = (): any => (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+  const getSpeechRecognition = (): any =>
+    (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
   useEffect(() => {
     setVoiceSupported(!!getSpeechRecognition());
@@ -29,6 +40,7 @@ export default function CastPage() {
     if (!SR) return;
 
     setError(null);
+    finalTranscriptRef.current = "";
 
     const recognition = new SR();
     recognition.continuous = true;
@@ -60,11 +72,17 @@ export default function CastPage() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((r: any) => r[0].transcript)
-        .join("");
-      setInput(transcript);
+      let interim = "";
+      // Only process results from resultIndex onwards to avoid duplication
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          finalTranscriptRef.current += result[0].transcript;
+        } else {
+          interim += result[0].transcript;
+        }
+      }
+      setInput(finalTranscriptRef.current + interim);
     };
 
     recognitionRef.current = recognition;
@@ -129,18 +147,8 @@ export default function CastPage() {
     }
   };
 
-  const examples = [
-    "A water tracker to drink 8 glasses a day",
-    "Expense log for my trip to Portugal",
-    "Habit tracker for morning meditation and gym",
-    "Countdown to my wedding on June 15th 2026",
-    "Quiz about European capitals",
-  ];
-
   return (
-    <main className="min-h-screen bg-[#0f0a2e] flex flex-col">
-      <TopNav variant="dark" />
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-3xl" />
@@ -152,9 +160,7 @@ export default function CastPage() {
         <div className="text-center mb-10">
           <div className="text-5xl mb-3 animate-float">🪄</div>
           <h1 className="text-4xl font-bold text-white mb-2">Cast your spell</h1>
-          <p className="text-indigo-300 text-lg">
-            Describe the app you want. Speak or type it.
-          </p>
+          <p className="text-indigo-300 text-lg">Describe the app you want. Speak or type it.</p>
         </div>
 
         {/* Input area */}
@@ -195,9 +201,7 @@ export default function CastPage() {
                   )}
                 </button>
               )}
-              <span className="text-indigo-400/40 text-xs">
-                {input.length} chars
-              </span>
+              <span className="text-indigo-400/40 text-xs">{input.length} chars</span>
             </div>
 
             {/* Cast button */}
@@ -253,7 +257,17 @@ export default function CastPage() {
           </div>
         </div>
       </div>
-      </div>
+    </div>
+  );
+}
+
+export default function CastPage() {
+  return (
+    <main className="min-h-screen bg-[#0f0a2e] flex flex-col">
+      <TopNav variant="dark" />
+      <Suspense fallback={<div className="flex-1" />}>
+        <CastPageInner />
+      </Suspense>
     </main>
   );
 }

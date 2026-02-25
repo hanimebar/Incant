@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, Globe, Lock, Trash2, ExternalLink, Copy, Check, Wand2 } from "lucide-react";
+import { Sparkles, Globe, Lock, Trash2, ExternalLink, Copy, Check, Wand2, Pencil } from "lucide-react";
+import EditSpellModal from "@/components/EditSpellModal";
 import { createClient } from "@/lib/supabase/client";
 import { TIER_LIMITS } from "@/types";
 import type { Profile, Spell } from "@/types";
@@ -23,6 +24,7 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
   const [spells, setSpells] = useState(initialSpells);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingSpell, setEditingSpell] = useState<Spell | null>(null);
   const supabase = createClient();
 
   const limits = TIER_LIMITS[profile.tier];
@@ -131,6 +133,10 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
                     <p className="text-xs text-gray-400 capitalize">{spell.template_id.replace(/-/g, " ")}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
+                    <button onClick={() => setEditingSpell(spell)}
+                      className="p-2 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-all">
+                      <Pencil className="w-4 h-4" />
+                    </button>
                     <button onClick={() => copyLink(spell)}
                       className="p-2 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-all">
                       {copiedId === spell.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -200,6 +206,16 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
           </p>
         </div>
       </div>
+      {editingSpell && (
+        <EditSpellModal
+          spell={editingSpell}
+          onClose={() => setEditingSpell(null)}
+          onSaved={(updated) => {
+            setSpells(spells.map((s) => (s.id === updated.id ? updated : s)));
+            setEditingSpell(null);
+          }}
+        />
+      )}
     </div>
   );
 }

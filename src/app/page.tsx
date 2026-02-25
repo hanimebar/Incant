@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mic, Sparkles, Share2, Smartphone } from "lucide-react";
 import type { Metadata } from "next";
 import TopNav from "@/components/TopNav";
+import TemplateShowcase from "@/components/TemplateShowcase";
 
 export const metadata: Metadata = {
   title: "Incant — Cast your idea into an app",
@@ -12,19 +13,6 @@ export const metadata: Metadata = {
     siteName: "Incant",
   },
 };
-
-const TEMPLATES = [
-  { icon: "✅", name: "Habit Tracker" },
-  { icon: "💧", name: "Water Intake" },
-  { icon: "💸", name: "Expense Logger" },
-  { icon: "📋", name: "To-Do List" },
-  { icon: "⏱️", name: "Countdown Timer" },
-  { icon: "🃏", name: "Flashcard Deck" },
-  { icon: "❓", name: "Quiz Builder" },
-  { icon: "📓", name: "Daily Journal" },
-  { icon: "🎯", name: "Goal Tracker" },
-  { icon: "🏦", name: "Savings Goal" },
-];
 
 const STEPS = [
   { icon: <Mic className="w-6 h-6" />, title: "Speak or type", desc: "Describe the app you want in plain language. \"A habit tracker for my morning routine.\"" },
@@ -96,15 +84,7 @@ export default function LandingPage() {
       <section className="px-4 py-16 max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-3">65 app templates</h2>
         <p className="text-indigo-400 text-center mb-10">Games, trackers, calculators, tools, creative toys, and more.</p>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {TEMPLATES.map(({ icon, name }) => (
-            <div key={name} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all">
-              <span className="text-2xl">{icon}</span>
-              <span className="text-xs text-indigo-300 text-center leading-tight">{name}</span>
-            </div>
-          ))}
-        </div>
-        <p className="text-center text-indigo-500 text-sm mt-4">+ 45 more — games, randomisers, calculators &amp; creative tools</p>
+        <TemplateShowcase />
       </section>
 
       {/* PWA section */}
