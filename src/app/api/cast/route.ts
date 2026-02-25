@@ -29,6 +29,51 @@ const TEMPLATE_DESCRIPTIONS = `
 - flashcard-deck: Front/back cards for studying, flip to reveal answer
 - data-table: Simple table with custom columns, add/view rows
 - custom-reminder: Set recurring reminders with custom message and frequency
+- simon-says: Classic Simon Says colour sequence memory game — watch the pattern, repeat it
+- snake: Snake arcade game — eat food, grow longer, avoid walls and yourself
+- minesweeper: Classic Minesweeper — reveal cells, flag mines, clear the grid
+- wordle-clone: Wordle-style 5-letter word guessing game — 6 attempts, colour hints
+- tic-tac-toe: Classic Tic Tac Toe — play against a friend or the computer
+- memory-match: Card matching memory game — flip cards to find matching pairs
+- rock-paper-scissors: Rock Paper Scissors against the computer — track your win streak
+- number-guess: Number guessing game — guess a secret number with higher/lower hints
+- hangman: Classic Hangman word game — guess letters before the stick figure is complete
+- coin-flip: Flip a virtual coin — heads or tails, with flip history
+- random-number: Generate random numbers within any range you set
+- dice-roller: Roll any combination of dice — d4, d6, d8, d10, d12, d20
+- magic-8-ball: Ask the Magic 8 Ball a yes/no question and get a mystical answer
+- spin-wheel: Customisable spinning wheel — add options and let it decide
+- random-name-picker: Enter a list of names, pick one at random — great for giveaways
+- decision-maker: Can't decide? Enter your options and let the app choose for you
+- would-you-rather: Generate Would You Rather dilemmas to play with friends
+- truth-or-dare: Truth or Dare card game — generate questions and dares
+- fortune-cookie: Get a random fortune cookie message whenever you need inspiration
+- compliment-machine: Get a genuine compliment whenever you need one — press and feel good
+- unit-converter: Convert between units — length, weight, temperature, volume and more
+- bmi-calculator: Calculate Body Mass Index from height and weight with category display
+- age-calculator: Calculate exact age in years, months, days from any birthdate
+- loan-calculator: Monthly loan repayment calculator with amortisation breakdown
+- compound-interest: Calculate compound interest growth over time with contributions
+- percentage-calc: Quick percentage calculations — find %, increases, and original values
+- roman-numerals: Convert numbers to Roman numerals and back
+- binary-hex: Convert between binary, decimal, hexadecimal, and octal number systems
+- colour-contrast: Check WCAG colour contrast ratio between two colours for accessibility
+- password-generator: Generate secure random passwords with customisable options
+- qr-generator: Generate a QR code from any text or URL, download as PNG
+- gradient-maker: Create CSS gradients visually — pick colours, angle, copy the code
+- colour-palette: Generate harmonious colour palettes from a seed colour
+- pixel-art: Pixelate any uploaded image into retro 8-bit pixel art
+- ascii-art: Convert text into ASCII art with different block font styles
+- pomodoro-timer: Pomodoro productivity timer — 25-minute work sessions with breaks
+- kanban-board: Simple Kanban board — drag tasks through To Do, In Progress, Done
+- pros-cons-list: Create a pros and cons list with a verdict to help make decisions
+- bucket-list: Track your bucket list — add goals, mark them done as you achieve them
+- typing-speed-test: Test your typing speed in WPM with accuracy tracking
+- breathing-exercise: Guided breathing exercise with configurable inhale/hold/exhale timing
+- meeting-agenda: Build and run timed meeting agendas with presenter notes
+- random-word: Generate random words by category for creative prompts and games
+- fake-quote: Generate absurd inspirational quotes attributed to made-up names
+- excuse-generator: Generate creative excuses by category with believability rating
 `;
 
 export async function POST(req: NextRequest) {

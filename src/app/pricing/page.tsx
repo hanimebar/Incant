@@ -17,7 +17,7 @@ const PLANS = [
     color: "#6b7280",
     features: [
       "2 spells",
-      "All 22 templates",
+      "All 65 templates",
       "Shareable PWA links",
       "Incant branding on links",
     ],
@@ -35,7 +35,7 @@ const PLANS = [
     color: "#a78bfa",
     features: [
       "1 spell",
-      "All 22 templates",
+      "All 65 templates",
       "No Incant branding",
       "Pay once, yours forever",
     ],
@@ -52,7 +52,7 @@ const PLANS = [
     color: "#6366f1",
     features: [
       "Unlimited spells",
-      "All 22 templates",
+      "All 65 templates",
       "Custom URL slugs",
       "No Incant branding",
       "Priority generation",

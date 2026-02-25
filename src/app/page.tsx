@@ -94,8 +94,8 @@ export default function LandingPage() {
 
       {/* Template showcase */}
       <section className="px-4 py-16 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3">20 app templates</h2>
-        <p className="text-indigo-400 text-center mb-10">Trackers, finance tools, productivity apps, and more.</p>
+        <h2 className="text-3xl font-bold text-center mb-3">65 app templates</h2>
+        <p className="text-indigo-400 text-center mb-10">Games, trackers, calculators, tools, creative toys, and more.</p>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {TEMPLATES.map(({ icon, name }) => (
             <div key={name} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all">
@@ -104,7 +104,7 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        <p className="text-center text-indigo-500 text-sm mt-4">+ 10 more templates</p>
+        <p className="text-center text-indigo-500 text-sm mt-4">+ 45 more — games, randomisers, calculators &amp; creative tools</p>
       </section>
 
       {/* PWA section */}
