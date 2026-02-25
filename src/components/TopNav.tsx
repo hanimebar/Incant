@@ -11,10 +11,10 @@ export default function TopNav({ variant = "dark" }: Props) {
 
   return (
     <nav
-      className={`w-full px-4 py-3 flex items-center justify-between ${
+      className={`sticky top-0 z-40 w-full px-4 py-3 flex items-center justify-between ${
         dark
           ? "bg-[#0f0a2e]/80 backdrop-blur-sm border-b border-white/5"
-          : "bg-white border-b border-gray-100"
+          : "bg-white/95 backdrop-blur-sm border-b border-gray-100"
       }`}
     >
       {/* Logo */}

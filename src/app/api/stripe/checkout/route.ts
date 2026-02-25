@@ -32,15 +32,21 @@ export async function POST(req: NextRequest) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://incant.app";
   const selectedPlan = PLANS[plan as keyof typeof PLANS];
 
-  const session = await stripe.checkout.sessions.create({
+  const baseParams = {
     customer: customerId,
-    mode: "subscription",
     line_items: [{ price: selectedPlan.priceId, quantity: 1 }],
     success_url: `${appUrl}/dashboard?upgraded=1`,
     cancel_url: `${appUrl}/pricing`,
     metadata: { supabase_uid: user.id, plan },
-    subscription_data: { metadata: { supabase_uid: user.id, plan } },
-  });
+  };
+
+  const session = selectedPlan.mode === "payment"
+    ? await stripe.checkout.sessions.create({ ...baseParams, mode: "payment" })
+    : await stripe.checkout.sessions.create({
+        ...baseParams,
+        mode: "subscription",
+        subscription_data: { metadata: { supabase_uid: user.id, plan } },
+      });
 
   return NextResponse.json({ url: session.url });
 }

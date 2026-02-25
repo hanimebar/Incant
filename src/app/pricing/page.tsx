@@ -9,13 +9,14 @@ const PLANS = [
   {
     id: "free",
     name: "Free",
+    icon: null,
     price: "€0",
     period: "/month",
     description: "Try it out",
     color: "#6b7280",
     features: [
       "2 spells",
-      "All 20 templates",
+      "All 22 templates",
       "Shareable PWA links",
       "Incant branding on links",
     ],
@@ -24,15 +25,33 @@ const PLANS = [
     highlight: false,
   },
   {
+    id: "apprentice",
+    name: "Apprentice",
+    icon: "/icon-apprentice.svg",
+    price: "€3",
+    period: " one-time",
+    description: "One clean spell, no subscription",
+    color: "#a78bfa",
+    features: [
+      "1 spell",
+      "All 22 templates",
+      "No Incant branding",
+      "Pay once, yours forever",
+    ],
+    cta: "Cast once",
+    highlight: false,
+  },
+  {
     id: "caster",
     name: "Caster",
+    icon: "/icon-caster.svg",
     price: "€7",
     period: "/month",
     description: "For regular casters",
     color: "#6366f1",
     features: [
       "Unlimited spells",
-      "All 20 templates",
+      "All 22 templates",
       "Custom URL slugs",
       "No Incant branding",
       "Priority generation",
@@ -43,6 +62,7 @@ const PLANS = [
   {
     id: "wizard",
     name: "Wizard",
+    icon: "/icon-wizard.svg",
     price: "€14",
     period: "/month",
     description: "For power users",
@@ -85,7 +105,7 @@ export default function PricingPage() {
           <p className="text-indigo-300 text-lg">Start free. Upgrade when you need more.</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           {PLANS.map((plan) => (
             <div
               key={plan.id}
@@ -100,6 +120,9 @@ export default function PricingPage() {
               )}
 
               <div className="mb-5">
+                {plan.icon && (
+                  <img src={plan.icon} alt={plan.name} className="w-12 h-12 mb-3" style={{ imageRendering: "pixelated" }} />
+                )}
                 <p className="text-sm font-medium mb-1" style={{ color: plan.color }}>{plan.name}</p>
                 <div className="flex items-end gap-1">
                   <span className="text-4xl font-bold text-white">{plan.price}</span>

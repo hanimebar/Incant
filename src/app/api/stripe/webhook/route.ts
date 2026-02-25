@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   const service = createServiceClient();
 
-  const updateTier = async (customerId: string, tier: "free" | "caster" | "wizard", subscriptionId?: string) => {
+  const updateTier = async (customerId: string, tier: "free" | "apprentice" | "caster" | "wizard", subscriptionId?: string) => {
     await service
       .from("profiles")
       .update({ tier, stripe_subscription_id: subscriptionId || null })
@@ -29,7 +29,8 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
-      const plan = session.metadata?.plan as "caster" | "wizard" | undefined;
+      const plan = session.metadata?.plan as "apprentice" | "caster" | "wizard" | undefined;
+      // One-time payments (apprentice) have no subscription; subscriptions have subId
       const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
       if (session.customer && plan) {
         await updateTier(session.customer as string, plan, subId);

@@ -1,4 +1,4 @@
-export type UserTier = "free" | "caster" | "wizard";
+export type UserTier = "free" | "apprentice" | "caster" | "wizard";
 
 export interface Profile {
   id: string;
@@ -79,7 +79,8 @@ export interface CastResult {
 }
 
 export const TIER_LIMITS: Record<UserTier, { maxApps: number; customSlug: boolean; branding: boolean; codeExport: boolean }> = {
-  free: { maxApps: 2, customSlug: false, branding: true, codeExport: false },
-  caster: { maxApps: Infinity, customSlug: true, branding: false, codeExport: false },
-  wizard: { maxApps: Infinity, customSlug: true, branding: false, codeExport: true },
+  free:       { maxApps: 2,        customSlug: false, branding: true,  codeExport: false },
+  apprentice: { maxApps: 1,        customSlug: false, branding: false, codeExport: false },
+  caster:     { maxApps: Infinity, customSlug: true,  branding: false, codeExport: false },
+  wizard:     { maxApps: Infinity, customSlug: true,  branding: false, codeExport: true  },
 };
