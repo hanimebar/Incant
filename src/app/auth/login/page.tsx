@@ -9,7 +9,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://incant.actvli.com";
 
 function LoginForm() {
   const params = useSearchParams();
-  const redirect = params.get("redirect") || "/dashboard";
+  const redirect = params.get("redirect") || "/";
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);

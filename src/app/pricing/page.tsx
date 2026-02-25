@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Sparkles, Wand2 } from "lucide-react";
 import Link from "next/link";
+import TopNav from "@/components/TopNav";
 
 const PLANS = [
   {
@@ -97,10 +98,11 @@ export default function PricingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0f0a2e] px-4 py-16">
+    <main className="min-h-screen bg-[#0f0a2e]">
+      <TopNav variant="dark" />
+      <div className="px-4 py-16">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <Link href="/" className="inline-block text-indigo-400 text-sm mb-6 hover:text-indigo-300">← Back to Incant</Link>
           <h1 className="text-4xl font-bold text-white mb-3">Simple pricing</h1>
           <p className="text-indigo-300 text-lg">Start free. Upgrade when you need more.</p>
         </div>
@@ -173,6 +175,7 @@ export default function PricingPage() {
         <p className="text-center text-indigo-500 text-sm mt-8">
           Cancel anytime. No long-term commitment.
         </p>
+      </div>
       </div>
     </main>
   );

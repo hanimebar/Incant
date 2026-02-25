@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Sparkles, BookOpen, Home } from "lucide-react";
+import { Sparkles, Globe, Tag } from "lucide-react";
+import NavUser from "./NavUser";
 
 interface Props {
   /** Makes the bar transparent/dark for dark-bg pages (cast, spell viewer) */
@@ -30,26 +31,26 @@ export default function TopNav({ variant = "dark" }: Props) {
       {/* Links */}
       <div className="flex items-center gap-1">
         <Link
-          href="/"
+          href="/explore"
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
             dark
               ? "text-indigo-300 hover:text-white hover:bg-white/10"
               : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
           }`}
         >
-          <Home className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Home</span>
+          <Globe className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Explore</span>
         </Link>
         <Link
-          href="/dashboard"
+          href="/pricing"
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
             dark
               ? "text-indigo-300 hover:text-white hover:bg-white/10"
               : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
           }`}
         >
-          <BookOpen className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Spellbook</span>
+          <Tag className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Pricing</span>
         </Link>
         <Link
           href="/cast"
@@ -62,6 +63,7 @@ export default function TopNav({ variant = "dark" }: Props) {
           <Sparkles className="w-3.5 h-3.5" />
           <span>Cast</span>
         </Link>
+        <NavUser dark={dark} />
       </div>
     </nav>
   );

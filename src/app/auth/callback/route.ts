@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url);
   const code = searchParams.get("code");
-  const redirect = searchParams.get("redirect") || "/dashboard";
+  const redirect = searchParams.get("redirect") || "/";
 
   if (code) {
     const supabase = await createClient();

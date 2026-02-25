@@ -49,6 +49,7 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
 
   const TIER_BADGE: Record<string, { label: string; color: string }> = {
     free: { label: "Free", color: "#6b7280" },
+    apprentice: { label: "Apprentice", color: "#a78bfa" },
     caster: { label: "Caster", color: "#6366f1" },
     wizard: { label: "Wizard ✨", color: "#f5c518" },
   };
@@ -57,25 +58,25 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-[#0f0a2e] text-white px-4 py-5">
+      {/* Spellbook header */}
+      <div className="bg-white border-b border-gray-100 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold flex items-center gap-2">
+            <h1 className="text-lg font-bold text-gray-800 flex items-center gap-2">
               <span>🪄</span> Spellbook
             </h1>
-            <div className="flex items-center gap-2 mt-1">
-              <p className="text-indigo-300 text-sm">@{profile.username}</p>
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ backgroundColor: badge.color, color: badge.color === "#f5c518" ? "#0f0a2e" : "white" }}>
+            <div className="flex items-center gap-2 mt-0.5">
+              <p className="text-gray-500 text-sm">@{profile.username}</p>
+              <span className="px-2 py-0.5 rounded-full text-xs font-semibold text-white" style={{ backgroundColor: badge.color }}>
                 {badge.label}
               </span>
             </div>
           </div>
           <Link
-            href="/cast"
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${atLimit ? "bg-white/10 text-white/40 cursor-not-allowed pointer-events-none" : "bg-[#f5c518] text-[#0f0a2e] hover:bg-yellow-300"}`}
+            href="/account"
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <Sparkles className="w-4 h-4" /> Cast
+            Account →
           </Link>
         </div>
       </div>
@@ -90,6 +91,18 @@ export default function SpellbookClient({ profile, spells: initialSpells }: Prop
             </div>
             <Link href="/pricing" className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700">
               Upgrade
+            </Link>
+          </div>
+        )}
+
+        {spells.length > 0 && (
+          <div className="mb-5 flex items-center justify-between">
+            <p className="text-sm text-gray-500">{spells.length} spell{spells.length !== 1 ? "s" : ""}</p>
+            <Link
+              href="/cast"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition-all ${atLimit ? "bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-[#0f0a2e] text-white hover:bg-indigo-900"}`}
+            >
+              <Sparkles className="w-4 h-4" /> Cast new spell
             </Link>
           </div>
         )}

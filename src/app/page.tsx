@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mic, Sparkles, Share2, Smartphone } from "lucide-react";
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
+import TopNav from "@/components/TopNav";
 
 export const metadata: Metadata = {
   title: "Incant — Cast your idea into an app",
@@ -35,18 +35,7 @@ const STEPS = [
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#0f0a2e] text-white overflow-hidden">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto">
-        <span className="text-xl font-bold flex items-center gap-2">🪄 Incant</span>
-        <div className="flex items-center gap-4">
-          <Link href="/explore" className="text-indigo-300 hover:text-white text-sm transition-colors">Explore</Link>
-          <Link href="/pricing" className="text-indigo-300 hover:text-white text-sm transition-colors">Pricing</Link>
-          <Link href="/auth/login"
-            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-sm font-medium transition-all">
-            Sign in
-          </Link>
-        </div>
-      </nav>
+      <TopNav variant="dark" />
 
       {/* Hero */}
       <section className="relative text-center px-4 pt-16 pb-24 max-w-3xl mx-auto">
@@ -158,7 +147,6 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <Footer />
     </main>
   );
 }

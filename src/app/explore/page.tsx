@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { Sparkles, Globe } from "lucide-react";
 import type { Metadata } from "next";
 import type { Spell } from "@/types";
+import TopNav from "@/components/TopNav";
 
 export const metadata: Metadata = { title: "Explore — Incant" };
 export const dynamic = "force-dynamic";
@@ -27,17 +28,7 @@ export default async function ExplorePage() {
 
   return (
     <main className="min-h-screen bg-[#0f0a2e] text-white">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto border-b border-white/5">
-        <Link href="/" className="text-xl font-bold flex items-center gap-2">🪄 Incant</Link>
-        <div className="flex items-center gap-4">
-          <Link href="/cast"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm text-[#0f0a2e]"
-            style={{ backgroundColor: "#f5c518" }}>
-            <Sparkles className="w-4 h-4" /> Cast
-          </Link>
-        </div>
-      </nav>
+      <TopNav variant="dark" />
 
       <div className="max-w-5xl mx-auto px-4 py-10">
         <div className="mb-8">

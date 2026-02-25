@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import SpellbookClient from "./SpellbookClient";
+import TopNav from "@/components/TopNav";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Spellbook — Incant" };
@@ -20,5 +21,10 @@ export default async function DashboardPage() {
     service.from("spells").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
   ]);
 
-  return <SpellbookClient profile={profile} spells={spells || []} />;
+  return (
+    <>
+      <TopNav variant="dark" />
+      <SpellbookClient profile={profile} spells={spells || []} />
+    </>
+  );
 }
