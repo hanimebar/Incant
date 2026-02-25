@@ -31,7 +31,8 @@ export type TemplateId =
   | "flashcard-deck"
   | "data-table"
   | "custom-reminder"
-  | "sound-board";
+  | "sound-board"
+  | "voice-modulator";
 
 export interface TemplateConfig {
   name: string;

@@ -30,6 +30,7 @@ const TEMPLATE_DESCRIPTIONS = `
 - data-table: Simple table with custom columns, add/view rows
 - custom-reminder: Set recurring reminders with custom message and frequency
 - sound-board: Soundboard with buttons that play fun synthesized sounds (fart noises, bleeps, boings, etc.)
+- voice-modulator: Real-time microphone voice changer with effects: robot, megaphone, cave echo, alien, Darth Vader (use for "voice changer", "make me sound like a robot", "voice modulator", "voice effects")
 `;
 
 export async function POST(req: NextRequest) {

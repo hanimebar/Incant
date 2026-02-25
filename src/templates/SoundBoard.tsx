@@ -23,8 +23,21 @@ const DEFAULT_SOUNDS: SoundButton[] = [
   { name: "Pop", emoji: "🎈", sound: "pop" },
 ];
 
+// Singleton AudioContext — iOS limits concurrent instances to 4
+let _ctx: AudioContext | null = null;
+function getCtx(): AudioContext {
+  if (!_ctx || _ctx.state === "closed") {
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    _ctx = new AC();
+  }
+  return _ctx;
+}
+
 function playSound(type: SoundType) {
-  const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+  const ctx = getCtx();
+  // iOS Safari starts AudioContext in "suspended" state even on user gesture —
+  // must call resume() before scheduling any nodes.
+  ctx.resume().then(() => {
   const gain = ctx.createGain();
   gain.connect(ctx.destination);
 
@@ -127,6 +140,7 @@ function playSound(type: SoundType) {
       break;
     }
   }
+  }); // ctx.resume().then
 }
 
 export default function SoundBoard({ config, spellId }: TemplateProps) {
