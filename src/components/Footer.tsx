@@ -2,9 +2,8 @@ import Link from "next/link";
 
 const OTHER_PRODUCTS = [
   { name: "RiskScope", href: "https://riskscope.actvli.com", desc: "Scam risk index" },
-  { name: "AdVerdict", href: "https://adverdict.actvli.com", desc: "Ad decision engine" },
-  { name: "Vault", href: "https://vault.actvli.com", desc: "Compliance templates" },
-  { name: "ÄctvliPDF", href: "https://actvlipdf.actvli.com", desc: "PDF toolkit" },
+  { name: "BillShrinkr", href: "https://billshrinkr.actvli.com", desc: "Subscription ROI tracker" },
+  { name: "Vault", href: "https://actvlivault.lemonsqueezy.com/", desc: "Compliance templates" },
 ];
 
 export default function Footer() {
