@@ -29,8 +29,6 @@ const TEMPLATE_MAP: Record<TemplateId, ReturnType<typeof lazy>> = {
   "flashcard-deck": lazy(() => import("@/templates/FlashcardDeck")),
   "data-table": lazy(() => import("@/templates/DataTable")),
   "custom-reminder": lazy(() => import("@/templates/CustomReminder")),
-  "sound-board": lazy(() => import("@/templates/SoundBoard")),
-  "voice-modulator": lazy(() => import("@/templates/VoiceModulator")),
 };
 
 interface Props {

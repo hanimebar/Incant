@@ -29,8 +29,6 @@ const TEMPLATE_DESCRIPTIONS = `
 - flashcard-deck: Front/back cards for studying, flip to reveal answer
 - data-table: Simple table with custom columns, add/view rows
 - custom-reminder: Set recurring reminders with custom message and frequency
-- sound-board: Soundboard with buttons that play fun synthesized sounds (fart noises, bleeps, boings, etc.)
-- voice-modulator: Real-time microphone voice changer with effects: robot, megaphone, cave echo, alien, Darth Vader (use for "voice changer", "make me sound like a robot", "voice modulator", "voice effects")
 `;
 
 export async function POST(req: NextRequest) {
@@ -119,7 +117,7 @@ Pick the best matching template. Be creative with the name.`,
 
     if (castResult.confidence < 0.35) {
       return NextResponse.json(
-        { error: "We couldn't match that to a supported app type yet. Try describing a tracker, list, calculator, journal, quiz, countdown, or soundboard." },
+        { error: "We couldn't match that to a supported app type yet. Try describing a tracker, list, calculator, journal, quiz, or countdown." },
         { status: 422 }
       );
     }
