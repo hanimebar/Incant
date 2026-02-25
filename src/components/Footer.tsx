@@ -82,8 +82,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-white/5 pt-4">
           <p>© {new Date().getFullYear()} Äctvli Responsible Consulting. All rights reserved.</p>
+          <p>Made with 🪄 in Finland</p>
         </div>
       </div>
     </footer>
