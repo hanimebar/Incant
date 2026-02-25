@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Mic, MicOff, Sparkles, Loader2, ArrowRight } from "lucide-react";
+import { Mic, Sparkles, Loader2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TopNav from "@/components/TopNav";
 
@@ -28,14 +28,35 @@ export default function CastPage() {
     const SR = getSpeechRecognition();
     if (!SR) return;
 
+    setError(null);
+
     const recognition = new SR();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "en-US";
 
     recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => setIsListening(false);
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onerror = (event: any) => {
+      setIsListening(false);
+      const code = event.error as string;
+      if (code === "not-allowed" || code === "permission-denied") {
+        setError("Microphone access denied. Allow mic access in your browser and try again.");
+      } else if (code === "no-speech") {
+        setError("No speech detected. Make sure your mic is active and speak clearly.");
+      } else if (code === "audio-capture") {
+        setError("No microphone found. Plug one in and try again.");
+      } else if (code === "network") {
+        setError("Speech recognition needs an internet connection. Check your connection and try again.");
+      } else if (code !== "aborted") {
+        setError(`Voice error: ${code}. Try typing instead.`);
+      }
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
@@ -47,11 +68,16 @@ export default function CastPage() {
     };
 
     recognitionRef.current = recognition;
-    recognition.start();
+    try {
+      recognition.start();
+    } catch {
+      setError("Could not start voice recognition. Try again or type your idea.");
+    }
   };
 
   const stopListening = () => {
     recognitionRef.current?.stop();
+    recognitionRef.current = null;
     setIsListening(false);
   };
 
@@ -153,13 +179,14 @@ export default function CastPage() {
                   className={cn(
                     "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all",
                     isListening
-                      ? "bg-red-500/20 text-red-400 border border-red-500/40 animate-pulse"
+                      ? "bg-red-500/20 text-red-400 border border-red-500/40"
                       : "bg-white/10 text-indigo-300 border border-white/10 hover:bg-white/15"
                   )}
                 >
                   {isListening ? (
                     <>
-                      <MicOff className="w-4 h-4" /> Stop
+                      <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                      Listening… tap to stop
                     </>
                   ) : (
                     <>
