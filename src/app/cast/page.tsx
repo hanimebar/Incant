@@ -24,7 +24,6 @@ function CastPageInner() {
   const [voiceSupported, setVoiceSupported] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
-  const finalTranscriptRef = useRef("");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getSpeechRecognition = (): any =>
@@ -40,7 +39,6 @@ function CastPageInner() {
     if (!SR) return;
 
     setError(null);
-    finalTranscriptRef.current = "";
 
     const recognition = new SR();
     recognition.continuous = true;
@@ -72,17 +70,20 @@ function CastPageInner() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
-      let interim = "";
-      // Only process results from resultIndex onwards to avoid duplication
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        if (result.isFinal) {
-          finalTranscriptRef.current += result[0].transcript;
+      // Always rebuild from ALL results in event.results (cumulative SpeechRecognitionResultList).
+      // Do NOT start from event.resultIndex — Android Chrome resets resultIndex to 0 even
+      // after earlier results are finalized, which causes re-adding them to any external
+      // accumulator and produces "isis thisis this thing" duplication.
+      let finalText = "";
+      let interimText = "";
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalText += event.results[i][0].transcript;
         } else {
-          interim += result[0].transcript;
+          interimText += event.results[i][0].transcript;
         }
       }
-      setInput(finalTranscriptRef.current + interim);
+      setInput(finalText + interimText);
     };
 
     recognitionRef.current = recognition;
