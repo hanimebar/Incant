@@ -40,16 +40,23 @@ function CastPageInner() {
 
     setError(null);
 
+    // Blur the active element before starting so Android's keyboard IME
+    // doesn't simultaneously insert its own transcription into the textarea,
+    // which was causing the "doesdoes thisdoes this work" duplication.
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     const recognition = new SR();
-    recognition.continuous = true;
+    // continuous:false — one utterance per session, then onend fires cleanly.
+    // On Android, continuous:true causes internal session restarts that make
+    // event.results unreliable and the keyboard IME interference worse.
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = "en-US";
 
     recognition.onstart = () => setIsListening(true);
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
+    recognition.onend = () => setIsListening(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onerror = (event: any) => {
@@ -70,20 +77,11 @@ function CastPageInner() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
-      // Always rebuild from ALL results in event.results (cumulative SpeechRecognitionResultList).
-      // Do NOT start from event.resultIndex — Android Chrome resets resultIndex to 0 even
-      // after earlier results are finalized, which causes re-adding them to any external
-      // accumulator and produces "isis thisis this thing" duplication.
-      let finalText = "";
-      let interimText = "";
+      let text = "";
       for (let i = 0; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalText += event.results[i][0].transcript;
-        } else {
-          interimText += event.results[i][0].transcript;
-        }
+        text += event.results[i][0].transcript;
       }
-      setInput(finalText + interimText);
+      setInput(text);
     };
 
     recognitionRef.current = recognition;
